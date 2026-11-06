@@ -1005,7 +1005,9 @@ footer .wrap {
 }
 
 .nl a {
-  display:block;
+  display:flex;
+  align-items:center;
+  gap:8px;
   padding:8px 14px;
   border-radius:999px;
   font-size:.9rem;
@@ -1312,6 +1314,59 @@ a,button {
   height:100%;
   object-fit:cover;
   display:block
+}
+
+@media (max-width:760px) {
+   html {
+    scroll-padding-top:16px
+  }
+   body {
+    padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))
+  }
+   .topnav {
+    top:auto;
+    bottom:0;
+    padding-top:0;
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    transform:none;
+    border-bottom:0;
+    border-top:1px solid var(--line);
+    background:rgba(10,10,11,.94)
+  }
+   .topnav .wrap {
+    height:auto;
+    padding:6px 8px
+  }
+   .brand {
+    display:none
+  }
+   .nl {
+    margin:0;
+    width:100%;
+    justify-content:space-around;
+    gap:4px
+  }
+   .nl li {
+    flex:1;
+    display:flex
+  }
+   .nl a {
+    flex:1;
+    flex-direction:column;
+    justify-content:center;
+    gap:3px;
+    padding:8px 4px;
+    min-height:58px;
+    font-size:.72rem;
+    border-radius:14px;
+    text-align:center
+  }
+   .nl a svg {
+    font-size:1.4rem
+  }
+   .fab {
+    bottom:calc(86px + env(safe-area-inset-bottom,0px))
+  }
 }
 
 @media (prefers-reduced-motion:reduce) {
