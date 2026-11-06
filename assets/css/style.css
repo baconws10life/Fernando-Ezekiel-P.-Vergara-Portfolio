@@ -85,7 +85,7 @@ h2 sup {
 }
 
 section {
-  padding:72px 0
+  padding:36px 0 48px
 }
 
 .btn {
@@ -1539,3 +1539,86 @@ a,button {
   }
 }
 
+
+
+/* ===== Round 2 fixes ===== */
+/* 1. Yellow sliver: a gradient background tiles into a transparent border; paint it from the border box instead */
+.btn.primary,.thumbs button.on,.thumbs button:hover,.circle:hover,.nl a.act,.rows a:hover,.rows a.on,.fab,.badge,.lb button,.skip,.sm-x:hover,.mono,.ico,.cap span,.avatar{
+  background-origin:border-box;
+  background-repeat:no-repeat
+}
+
+/* 2. White flash when overscrolling at the top / bottom */
+html{
+  background:var(--bg);
+  overscroll-behavior-y:none
+}
+body{overscroll-behavior-y:none}
+
+/* 3. Project previews: never crop, fill the column on desktop */
+.gal img{object-fit:contain;background:#0d1210}
+.gal .main{background:#0d1210}
+@media (min-width:981px){
+  .feat .gal{justify-content:space-between}
+  .feat .gal .main{flex:1 1 auto;aspect-ratio:auto;min-height:0}
+  .feat .gal .thumbs{flex:none}
+}
+
+/* 4. Scroll gates: each section is a stop */
+html{scroll-snap-type:y mandatory;scroll-padding-top:60px}
+.hero{scroll-snap-align:start}
+section{scroll-snap-align:start;scroll-snap-stop:always}
+footer{scroll-snap-align:end}
+@media (min-width:761px){
+  section{min-height:calc(100vh - 60px);min-height:calc(100svh - 60px);display:flex;align-items:center}
+  section>.wrap{width:100%}
+  #projects{display:block;min-height:0;padding-top:48px}
+}
+
+/* 5. Section entrance animation (replays each time a section comes back into view) */
+.js .rv{opacity:0}
+.js section.in .rv,.js .rv.in{opacity:1;animation:rise .75s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:calc(var(--i,0)*90ms + 80ms)}
+@keyframes rise{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
+
+/* 6. Overlay that sweeps across when a section locks in */
+.veil{
+  position:fixed;inset:0;z-index:55;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;
+  background:rgba(10,10,11,.72);
+  -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
+  border-top:3px solid transparent;
+  border-image:var(--grad) 1;
+  transform:translateY(101%);
+  visibility:hidden
+}
+.veil.go{visibility:visible;animation:veilDown .8s cubic-bezier(.7,0,.25,1) both}
+.veil.go.up{animation-name:veilUp}
+.veil-n{font-size:.85rem;letter-spacing:.2em;color:var(--muted)}
+.veil-t{
+  font-size:clamp(2.4rem,9vw,5.5rem);font-weight:800;letter-spacing:-.04em;line-height:1;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  padding:0 .05em
+}
+@keyframes veilDown{0%{transform:translateY(101%)}38%,55%{transform:none}100%{transform:translateY(-101%)}}
+@keyframes veilUp{0%{transform:translateY(-101%)}38%,55%{transform:none}100%{transform:translateY(101%)}}
+
+/* 7. Mobile polish */
+@media (max-width:760px){
+  html{scroll-padding-top:12px;scroll-padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+  /* smaller Download CV / Contact buttons, one per row */
+  .cta{gap:10px}
+  .cta .btn{flex:1 1 100%;min-height:42px;padding:9px 18px;font-size:.86rem}
+  .cta .btn svg{font-size:1rem}
+  .socials{justify-content:center}
+  /* scroll-to-top: centred above the bottom bar */
+  .fab{right:auto;left:50%;margin-left:-24px;width:48px;height:48px;font-size:1.25rem}
+  /* footer centred, with Back to Top in the middle */
+  footer .wrap{flex-direction:column;align-items:center;text-align:center}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .js .rv{opacity:1}
+  .js section.in .rv,.js .rv.in{animation:none}
+  .veil{display:none}
+  html{scroll-snap-type:none}
+}
