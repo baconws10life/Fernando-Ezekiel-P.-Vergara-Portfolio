@@ -35,7 +35,21 @@
   im.onerror=pDone;im.src=box.getAttribute('data-photo')});
 
  /* skill cards */
- $$('.skill>button').forEach(function(b){b.addEventListener('click',function(){var a=b.parentNode,o=a.classList.toggle('open');b.setAttribute('aria-expanded',o)})});
+ var sm=document.createElement('div');sm.className='sm';
+ sm.innerHTML='<div class="sm-card" role="dialog" aria-modal="true" aria-labelledby="smT"><button type="button" class="sm-x" aria-label="Close skill details"><svg class="i"><use href="#close"/></svg></button><div class="sm-head"><span class="ico"></span><h3 id="smT"></h3></div><div class="sm-body"></div></div>';
+ document.body.appendChild(sm);
+ var smx=$('.sm-x',sm),smLast=null;
+ function openSkill(card,btn){
+  $('.ico',sm).innerHTML=$('.ico',card).innerHTML;
+  $('#smT').textContent=$('h3',card).textContent.trim();
+  $('.sm-body',sm).innerHTML=$('.detail .in',card).innerHTML;
+  smLast=btn;sm.classList.add('show');document.body.style.overflow='hidden';sm.scrollTop=0;$('.sm-card',sm).scrollTop=0;setTimeout(function(){smx.focus()},50);
+ }
+ function closeSkill(){sm.classList.remove('show');document.body.style.overflow='';if(smLast)smLast.focus()}
+ sm.addEventListener('click',function(e){if(e.target===sm)closeSkill()});
+ smx.addEventListener('click',closeSkill);
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&sm.classList.contains('show'))closeSkill()});
+ $$('.skill>button').forEach(function(b){b.removeAttribute('aria-expanded');b.setAttribute('aria-haspopup','dialog');b.addEventListener('click',function(){openSkill(b.parentNode,b)})});
 
  /* image viewer */
  var lb=document.createElement('div');lb.className='lb';lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');lb.setAttribute('aria-label','Image viewer');
